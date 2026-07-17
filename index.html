@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniMedSeg - Medical Image Segmentation Dataset List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1a1a2e;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 40px 20px 30px;
+            text-align: center;
+            border-bottom: 4px solid #e94560;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 span {
+            color: #e94560;
+        }
+
+        .header p {
+            font-size: 1.15rem;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .header .badge-container {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .badge strong {
+            color: #e94560;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin: -20px auto 24px;
+            max-width: 900px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e8ecf1;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0 16px;
+        }
+
+        .stat-item .number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0f3460;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: #6b7a8f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-divider {
+            width: 1px;
+            background: #e0e5ec;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 20px;
+            align-items: center;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .controls input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 2px solid #e0e5ec;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border 0.2s;
+            background: #fafbfc;
+        }
+
+        .controls input:focus {
+            outline: none;
+            border-color: #0f3460;
+            background: white;
+        }
+
+        .controls select {
+            padding: 10px 16px;
+            border: 2px solid #e0e5ec;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #fafbfc;
+            cursor: pointer;
+            min-width: 140px;
+        }
+
+        .controls select:focus {
+            outline: none;
+            border-color: #0f3460;
+        }
+
+        .controls .clear-btn {
+            padding: 10px 20px;
+            background: #f0f2f5;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: #4a5a6e;
+            transition: background 0.2s;
+        }
+
+        .controls .clear-btn:hover {
+            background: #e0e5ec;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e8ecf1;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            padding: 0 4px 4px 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            min-width: 900px;
+        }
+
+        thead {
+            background: #f8f9fc;
+            border-bottom: 2px solid #e8ecf1;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            position: sticky;
+            top: 0;
+            background: #f8f9fc;
+            z-index: 10;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #eef1f5;
+        }
+
+        th .sort-arrow {
+            margin-left: 6px;
+            opacity: 0.4;
+            font-size: 0.7rem;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fafbfc;
+        }
+
+        .modality-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            background: #eef1f5;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+
+        .modality-badge.CT { background: #dbeafe; color: #1e40af; }
+        .modality-badge.MRI { background: #e0e7ff; color: #3730a3; }
+        .modality-badge.Fundus { background: #fce7f3; color: #9d174d; }
+        .modality-badge.Ultrasound { background: #d1fae5; color: #065f46; }
+        .modality-badge.Microscopy { background: #fef3c7; color: #92400e; }
+        .modality-badge.Endoscopy { background: #fde68a; color: #78350f; }
+        .modality-badge.OCT { background: #c7d2fe; color: #3730a3; }
+        .modality-badge.Dermoscopy { background: #fca5a5; color: #7f1d1d; }
+        .modality-badge.XRay { background: #e5e7eb; color: #1f2937; }
+
+        .targets-cell {
+            max-width: 280px;
+            font-size: 0.82rem;
+            color: #4a5a6e;
+        }
+
+        .targets-cell .target-tag {
+            display: inline-block;
+            background: #f0f2f5;
+            padding: 1px 8px;
+            border-radius: 4px;
+            margin: 1px 2px;
+            font-size: 0.7rem;
+        }
+
+        .license-cell {
+            font-size: 0.78rem;
+            color: #4a5a6e;
+        }
+
+        .link-cell a {
+            color: #0f3460;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .link-cell a:hover {
+            text-decoration: underline;
+            color: #e94560;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6b7a8f;
+            font-size: 1.1rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px 20px;
+            color: #6b7a8f;
+            font-size: 0.9rem;
+            border-top: 1px solid #e8ecf1;
+            margin-top: 30px;
+        }
+
+        .footer a {
+            color: #0f3460;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1rem; }
+            .stats-bar { padding: 14px 16px; gap: 8px; }
+            .stat-item .number { font-size: 1.2rem; }
+            .controls { flex-direction: column; }
+            .controls input { width: 100%; }
+            .controls select { width: 100%; }
+            .controls .clear-btn { width: 100%; }
+            th, td { padding: 8px 10px; font-size: 0.8rem; }
+            .targets-cell { max-width: 150px; }
+            .stat-divider { display: none; }
+        }
+
+        /* Scrollable container for the table */
+        .table-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f0f2f5;
+            border-radius: 4px;
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #c0c8d4;
+            border-radius: 4px;
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #a0aab8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🩺 OmniMed<span>Seg</span></h1>
+    <p>A comprehensive, searchable list of open-licensed medical image segmentation datasets — standardized and ready for research.</p>
+    <div class="badge-container">
+        <span class="badge"><strong>166</strong> Datasets</span>
+        <span class="badge"><strong>9</strong> Modalities</span>
+        <span class="badge">✅ Open-Licensed</span>
+        <span class="badge">📦 Directly Accessible</span>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="stats-bar" id="statsBar">
+        <!-- Filled by JS -->
+    </div>
+
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="🔍 Search by dataset, target, paper, or modality..." aria-label="Search datasets">
+        <select id="modalityFilter" aria-label="Filter by modality">
+            <option value="">All Modalities</option>
+        </select>
+        <button class="clear-btn" id="clearBtn">✕ Clear Filters</button>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-sort="dataset">Dataset <span class="sort-arrow">↕</span></th>
+                        <th data-sort="modality">Modality <span class="sort-arrow">↕</span></th>
+                        <th data-sort="year">Year <span class="sort-arrow">↕</span></th>
+                        <th data-sort="targets">Targets</th>
+                        <th data-sort="image_count">Images <span class="sort-arrow">↕</span></th>
+                        <th data-sort="license">License</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>OmniMedSeg — Standardized Medical Image Segmentation Datasets</p>
+        <p style="font-size:0.8rem; margin-top:4px;">Data collected and standardized from open sources. For full details, see the <a href="#">OmniMedSeg repository</a>.</p>
+    </div>
+
+</div>
+
+<script>
+// Full dataset (copied from your CSV/JSON)
+const datasets = [
+  {"dataset":"YEAZ","modality":"Microscopy","year":"2020","targets":"Yeast Cell","image_count":349,"license":"CC-BY 4.0","dataset_link":"https://www.epfl.ch/labs/lpbs/data-and-software/#:~:text=Nature%20Methods%20(2024)-,YeaZ,-%E2%80%93%20A%20convolutional%20neural"},
+  {"dataset":"SSTEM","modality":"Microscopy","year":"2013","targets":"Membrane, Mitochondria, Synapse","image_count":20,"license":"CC BY-NC-SA 3.0","dataset_link":"http://github.com/unidesigner/groundtruth-drosophila-vnc"},
+  {"dataset":"VICAR","modality":"Microscopy","year":"2021","targets":"Cell","image_count":530,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/5153251#.YlAixn9Bzmg"},
+  {"dataset":"PCMMD","modality":"Microscopy","year":"2024","targets":"Plasma Cell","image_count":3516,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/3v2nrxpr9s/1"},
+  {"dataset":"EMDS_6","modality":"Microscopy","year":"","targets":"Microorganism","image_count":840,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/EMDS-6/17125025/1?file=31660352"},
+  {"dataset":"CCAGT","modality":"Microscopy","year":"2022","targets":"Nucleus, White Blood Cell, Overlapped Nuclei, Non Viable Nucleus","image_count":9339,"license":"CC-BY-NC 3.0","dataset_link":"https://data.mendeley.com/datasets/wg4bpm33hj/2"},
+  {"dataset":"WBC","modality":"Microscopy","year":"2018","targets":"Nucleus, White Blood Cell, Cytoplasm","image_count":400,"license":"GPL-3.0","dataset_link":"https://github.com/zxaoyou/segmentation_WBC"},
+  {"dataset":"SLIMIA","modality":"Microscopy","year":"2025","targets":"Spheroid","image_count":7983,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/collections/The_Spheroid_Light_Microscopy_Image_Atlas_SLiMIA_for_morphometrical_analysis_of_three_dimensional_cell_cultures/7486311"},
+  {"dataset":"BBBC010","modality":"Microscopy","year":"2009","targets":"C Elegans","image_count":100,"license":"CC0 1.0","dataset_link":"https://bbbc.broadinstitute.org/BBBC010"},
+  {"dataset":"BBBC038","modality":"Microscopy","year":"2019","targets":"Nucleus","image_count":670,"license":"CC0 1.0","dataset_link":"https://bbbc.broadinstitute.org/BBBC038"},
+  {"dataset":"BRIFISEG","modality":"Microscopy","year":"2022","targets":"Nucleus, Nucleus Border, Nucleus Center","image_count":38,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/7195636"},
+  {"dataset":"FLUORESCENT_NEURONAL_CELLS","modality":"Microscopy","year":"2024","targets":"Neuronal Cell","image_count":749,"license":"CC-BY 4.0","dataset_link":"https://amsacta.unibo.it/id/eprint/7347/"},
+  {"dataset":"BBBC041SEG","modality":"Microscopy","year":"2021","targets":"Blood Cell","image_count":1328,"license":"MIT License","dataset_link":"https://github.com/Deponker/Blood-cell-segmentation"},
+  {"dataset":"OCCISC","modality":"Microscopy","year":"2016","targets":"Nucleus, Cervical Cell, Cytoplasm","image_count":961,"license":"","dataset_link":"https://cs.adelaide.edu.au/~carneiro/isbi14_challenge/dataset.html"},
+  {"dataset":"MUSCLE_US","modality":"Ultrasound","year":"","targets":"Tibialis Anterior, Biceps Brachii, Gastrocnemius Medialis","image_count":8169,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/3jykz7wz8d/1"},
+  {"dataset":"DDTI","modality":"Ultrasound","year":"2015","targets":"Thyroid Cancer, Thyroid Tumor","image_count":936,"license":"","dataset_link":"https://cimalab.unal.edu.co/projects/detail/20/"},
+  {"dataset":"TG3K","modality":"Ultrasound","year":"2017","targets":"Thyroid","image_count":3585,"license":"CC-BY-NC 3.0","dataset_link":"https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segmentation"},
+  {"dataset":"PSFHS","modality":"Ultrasound","year":"","targets":"Fetal Head, Pubic Symphysis","image_count":8000,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/7851339#.ZEH6eHZBztU"},
+  {"dataset":"FASS","modality":"Ultrasound","year":"","targets":"Aorta, Liver, Umbilical Vein, Stomach","image_count":1588,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/4gcpm9dsc3/1"},
+  {"dataset":"TN3K","modality":"Ultrasound","year":"2023","targets":"Thyroid Tumor","image_count":3493,"license":"CC-BY-NC 3.0","dataset_link":"https://github.com/haifangong/TRFE-Net-for-thyroid-nodule-segmentation"},
+  {"dataset":"BUS_BRA","modality":"Ultrasound","year":"","targets":"Breast Tumor","image_count":3750,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/8231412"},
+  {"dataset":"MMOTU","modality":"Ultrasound","year":"","targets":"Ovarian Tumor","image_count":1202,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/_zip/25058690?file=44222642"},
+  {"dataset":"BUS_UCLM","modality":"Ultrasound","year":"","targets":"Breast Tumor","image_count":1366,"license":"CC-BY-NC 4.0","dataset_link":"https://data.mendeley.com/datasets/7fvgj4jsp7/2"},
+  {"dataset":"HC18","modality":"Ultrasound","year":"2018","targets":"Fetal Head","image_count":1998,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/1327317"},
+  {"dataset":"100_US","modality":"Ultrasound","year":"2016","targets":"Liver Tumor","image_count":105,"license":"","dataset_link":"https://www.researchgate.net/publication/307907688_Ultrasound_Liver_Tumor_Datasets_Segmentations"},
+  {"dataset":"OASBUD","modality":"Ultrasound","year":"2017","targets":"Breast Tumor","image_count":101,"license":"CC-BY-NC 4.0","dataset_link":"https://zenodo.org/records/545928"},
+  {"dataset":"BUSI","modality":"Ultrasound","year":"2020","targets":"Breast Cancer, Breast Tumor","image_count":780,"license":"","dataset_link":"https://scholar.cu.edu.eg/?q=afahmy/pages/dataset"},
+  {"dataset":"AKRAM","modality":"Fundus","year":"2020","targets":"Vessels, Veins, Arteries","image_count":100,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/3csr652p9y/2"},
+  {"dataset":"TREND","modality":"Fundus","year":"2021","targets":"Vessels","image_count":82,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/4521044"},
+  {"dataset":"HVDROPDB","modality":"Fundus","year":"2024","targets":"Vessels, Optic Disc, Ridge","image_count":300,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/xw5xc7xrmp/3"},
+  {"dataset":"HRF","modality":"Fundus","year":"2013","targets":"Vessels","image_count":30,"license":"CC-BY 4.0","dataset_link":"https://www5.cs.fau.de/research/data/fundus-images/"},
+  {"dataset":"PAPILA","modality":"Fundus","year":"","targets":"Optic Cup, Optic Disc","image_count":177,"license":"GPL-3.0","dataset_link":"https://figshare.com/articles/dataset/PAPILA/14798004?file=35013982"},
+  {"dataset":"COPH100","modality":"Fundus","year":"","targets":"Vessels","image_count":324,"license":"CC-BY 4.0","dataset_link":"https://springernature.figshare.com/articles/dataset/COph100_A_Comprehensive_Fundus_Image_Registration_Dataset_from_Infants_constituting_the_RIDIRP_database/27061084?file=51235925"},
+  {"dataset":"FIVES","modality":"Fundus","year":"","targets":"Vessels","image_count":800,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/figure/FIVES_A_Fundus_Image_Dataset_for_AI-based_Vessel_Segmentation/19688169/1"},
+  {"dataset":"CHAKSU","modality":"Fundus","year":"","targets":"Optic Cup, Optic Disc","image_count":1009,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/Ch_k_u_A_glaucoma_specific_fundus_image_database/20123135?file=38944805"},
+  {"dataset":"RETA","modality":"Fundus","year":"2022","targets":"Vessels","image_count":54,"license":"CC-BY 4.0","dataset_link":"https://reta-benchmark.org/dataset/"},
+  {"dataset":"RAVIR","modality":"Fundus","year":"2022","targets":"Vessels","image_count":23,"license":"CC BY-NC-SA 4.0","dataset_link":"https://ravir.grand-challenge.org/data/"},
+  {"dataset":"OCUTOX","modality":"Fundus","year":"","targets":"Lesions","image_count":179,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/13883485"},
+  {"dataset":"FUNDUS_AV_SEG","modality":"Fundus","year":"","targets":"Vessels, Veins, Arteries","image_count":100,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/Fundus-AVSeg/27938034?file=50905809"},
+  {"dataset":"ORVS","modality":"Fundus","year":"2021","targets":"Vessels","image_count":49,"license":"","dataset_link":"https://github.com/AbdullahSarhan/ICPRVessels"},
+  {"dataset":"ROP","modality":"Fundus","year":"2023","targets":"Optic Disc","image_count":129,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/tv3b2bt6dy/2"},
+  {"dataset":"NETRA","modality":"Fundus","year":"","targets":"Optic Cup, Optic Disc","image_count":508,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/NETRA_Dataset/22817144?file=40564889"},
+  {"dataset":"LES_AV","modality":"Fundus","year":"","targets":"Vessels, Veins, Arteries","image_count":22,"license":"GPL-3.0","dataset_link":"https://figshare.com/articles/dataset/LES-AV_dataset/11857698?file=21732282"},
+  {"dataset":"STARE","modality":"Fundus","year":"2000","targets":"Vessels","image_count":20,"license":"","dataset_link":"https://cecas.clemson.edu/~ahoover/stare/"},
+  {"dataset":"CHASEDB","modality":"Fundus","year":"2012","targets":"Vessels","image_count":28,"license":"CC-BY 4.0","dataset_link":"https://researchinnovation.kingston.ac.uk/en/datasets/chasedb1-retinal-vessel-reference-dataset-4/"},
+  {"dataset":"CSC","modality":"Fundus","year":"2022","targets":"Subretinal Fluid","image_count":1069,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/4k64fwnp4k/5"},
+  {"dataset":"POLYP_DB","modality":"Endoscopy","year":"2024","targets":"Polyp","image_count":3934,"license":"","dataset_link":"https://github.com/DebeshJha/PolypDB"},
+  {"dataset":"FETREG","modality":"Endoscopy","year":"","targets":"Surgical Tool, Fetus, Placental Vessels","image_count":2718,"license":"CC-BY-NC-SA 4.0","dataset_link":"https://rdr.ucl.ac.uk/articles/dataset/_b_FetReg_Largescale_Multi-centre_Fetoscopy_Placenta_Dataset_b_/30417166"},
+  {"dataset":"LARYNGEAL_ENDOSCOPIC","modality":"Endoscopy","year":"2019","targets":"Glottal Space, Instrument, Tumor","image_count":536,"license":"CC-BY 4.0","dataset_link":"https://github.com/imesluh/vocalfolds"},
+  {"dataset":"CVC_CLINICDB","modality":"Endoscopy","year":"2015","targets":"Polyp","image_count":612,"license":"","dataset_link":"https://polyp.grand-challenge.org/CVCClinicDB/"},
+  {"dataset":"FETOSCOPY_PLACENTA","modality":"Endoscopy","year":"2020","targets":"Placental Vessels","image_count":483,"license":"CC-BY-NC-SA 4.0","dataset_link":"https://rdr.ucl.ac.uk/articles/dataset/Fetoscopy_Placenta_Dataset/30536171"},
+  {"dataset":"BAGLS","modality":"Endoscopy","year":"2020","targets":"Glottal Space","image_count":59250,"license":"CC-BY-NC-SA 4.0","dataset_link":"https://zenodo.org/records/3762320"},
+  {"dataset":"HYPER_KVASIR","modality":"Endoscopy","year":"2020","targets":"Polyp","image_count":1000,"license":"CC-BY 4.0","dataset_link":"https://datasets.simula.no/hyper-kvasir/"},
+  {"dataset":"ENDOVIS_15","modality":"Endoscopy","year":"2017","targets":"Instrument, Manipulator, Shaft","image_count":300,"license":"CC-BY-NC 3.0","dataset_link":"https://archive.iar.kit.edu/opencas/index.html%3Fq=node%252F30.html"},
+  {"dataset":"KVASIR_CAPSULE_SEG","modality":"Endoscopy","year":"2021","targets":"Polyp","image_count":55,"license":"","dataset_link":"https://datasets.simula.no/kvasir-capsule-seg/"},
+  {"dataset":"POLYP_GEN","modality":"Endoscopy","year":"2023","targets":"Polyp","image_count":0,"license":"","dataset_link":"https://www.synapse.org/Synapse:syn26376615/wiki/613312"},
+  {"dataset":"EAD","modality":"Endoscopy","year":"2021","targets":"Artefact","image_count":24,"license":"CC-BY-NC 3.0","dataset_link":"https://data.mendeley.com/datasets/c7fjbxcgj9/3"},
+  {"dataset":"KVASIR_SEG","modality":"Endoscopy","year":"2020","targets":"Polyp","image_count":1000,"license":"","dataset_link":"https://datasets.simula.no/kvasir-seg/"},
+  {"dataset":"COUINAUD","modality":"CT","year":"2019","targets":"Couinaud Segments, Liver","image_count":443,"license":"MIT","dataset_link":"https://github.com/GLCUnet/dataset"},
+  {"dataset":"CT_LYMPH_NODES","modality":"CT","year":"2015","targets":"Lymph Node","image_count":176,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/collection/ct-lymph-nodes/"},
+  {"dataset":"PANCREATIC_CT_CBCT_SEG","modality":"CT","year":"2021","targets":"Right Lung, Small Bowel, Left Lung, Stomach","image_count":37,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/pancreatic-ct-cbct-seg/"},
+  {"dataset":"AERO_PATH","modality":"CT","year":"2023","targets":"Airways, Lungs","image_count":27,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/10069289"},
+  {"dataset":"FUMPE","modality":"CT","year":"2018","targets":"Pulmonary Embolism","image_count":35,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/collections/FUMPE/4107803"},
+  {"dataset":"LCTSC","modality":"CT","year":"2017","targets":"Right Lung, Left Lung, Esophagus, Heart","image_count":58,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/collection/lctsc/"},
+  {"dataset":"TOPCOW","modality":"CT","year":"2025","targets":"Cerebral Vessels","image_count":250,"license":"","dataset_link":"https://topcow24.grand-challenge.org/data/"},
+  {"dataset":"CURVAS","modality":"CT","year":"2024","targets":"Pancreas, Liver, Kidneys","image_count":20,"license":"CC-BY-NC 4.0","dataset_link":"https://zenodo.org/records/12687192"},
+  {"dataset":"MEDSEG_INFERIOR_VENA_CAVA","modality":"CT","year":"","targets":"Inferior Vena Cava","image_count":20,"license":"CC0 1.0","dataset_link":"https://figshare.com/articles/dataset/MedSeg_Inferior_Vena_Cava_Dataset/15180192"},
+  {"dataset":"LIVER_SEGMENTS","modality":"CT","year":"","targets":"Couinaud Segments, Liver","image_count":50,"license":"CC0 1.0","dataset_link":"https://figshare.com/articles/dataset/MedSeg_Liver_segments_dataset/13643252"},
+  {"dataset":"ATM","modality":"CT","year":"2022","targets":"Airways","image_count":300,"license":"CC-BY-NC","dataset_link":"https://zenodo.org/records/7949582"},
+  {"dataset":"TOTAL_SEGMENTATOR","modality":"CT","year":"2023","targets":"117 Anatomical Structures","image_count":1228,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/10047292"},
+  {"dataset":"LUNA","modality":"CT","year":"2017","targets":"Right Lung, Airways, Lungs, Left Lung","image_count":888,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/3723295"},
+  {"dataset":"COVID19_LUNG_LESION","modality":"CT","year":"2021","targets":"Lung Lesion","image_count":199,"license":"CC-BY 4.0","dataset_link":"https://covid-segmentation.grand-challenge.org/Data/"},
+  {"dataset":"STACOM_SLAWT_CT","modality":"CT","year":"2018","targets":"Left Atrium","image_count":10,"license":"CC-BY 4.0","dataset_link":"https://www.doc.ic.ac.uk/~rkarim/la_lv_framework/wall/index.html"},
+  {"dataset":"VERSE_2019","modality":"CT","year":"2021","targets":"Vertebrae","image_count":160,"license":"CC BY-SA 4.0","dataset_link":"https://github.com/anjany/verse"},
+  {"dataset":"FLARE_2021","modality":"CT","year":"2021","targets":"Liver, Spleen, Kidneys, Pancreas","image_count":361,"license":"CC-BY-NC-SA","dataset_link":"https://zenodo.org/records/5903672"},
+  {"dataset":"ULS","modality":"CT","year":"2023","targets":"Lesion","image_count":6376,"license":"CC BY-NC-SA 4.0","dataset_link":"https://zenodo.org/records/10035161"},
+  {"dataset":"PLETHORA","modality":"CT","year":"2020","targets":"Pleural Effusion, Right Lung, Left Lung","image_count":402,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/analysis-result/plethora/"},
+  {"dataset":"COLORECTAL_LIVER_METASTASES","modality":"CT","year":"2024","targets":"Liver, Liver Tumor, Portal Vein","image_count":197,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/colorectal-liver-metastases/"},
+  {"dataset":"KITS23","modality":"CT","year":"2023","targets":"Kidneys, Kidney Tumor","image_count":489,"license":"CC BY-NC-SA 4.0","dataset_link":"https://kits-challenge.org/kits23/"},
+  {"dataset":"PDDCA","modality":"CT","year":"2017","targets":"Parotid, Mandible, Chiasm, Optic Nerves","image_count":48,"license":"CC0 1.0","dataset_link":"https://www.imagenglab.com/newsite/pddca/"},
+  {"dataset":"MSD_HEPATIC_VESSEL","modality":"CT","year":"2019","targets":"Liver Vessel, Liver Tumor","image_count":303,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"NSCLC_RADIOMICS","modality":"CT","year":"2019","targets":"Lung Tumor, Right Lung, Left Lung","image_count":209,"license":"CC-BY-NC 3.0","dataset_link":"https://www.cancerimagingarchive.net/collection/nsclc-radiomics/"},
+  {"dataset":"MSD_PANCREAS","modality":"CT","year":"2019","targets":"Pancreas, Pancreas Tumor","image_count":281,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"PROSTATE_EDGE_CASES","modality":"CT","year":"2023","targets":"Prostate, Bladder, Rectum, Femoral Heads","image_count":129,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/prostate-anatomical-edge-cases/"},
+  {"dataset":"MSD_SPLEEN","modality":"CT","year":"2019","targets":"Spleen","image_count":41,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"KITS19","modality":"CT","year":"2020","targets":"Kidneys, Kidney Tumor","image_count":300,"license":"CC BY-NC-SA","dataset_link":"https://kits19.grand-challenge.org/data/"},
+  {"dataset":"MSD_LUNG","modality":"CT","year":"2019","targets":"Lung Tumor","image_count":126,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"SPINEMETS","modality":"CT","year":"2024","targets":"Vertebrae","image_count":55,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/spine-mets-ct-seg/"},
+  {"dataset":"DAP_ATLAS","modality":"CT","year":"2022","targets":"Multiple Organs","image_count":496,"license":"CC-BY 4.0","dataset_link":"https://github.com/alexanderjaus/AtlasDataset"},
+  {"dataset":"STS_TOOTH_CT","modality":"CT","year":"2024","targets":"Tooth","image_count":8,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/10597292"},
+  {"dataset":"ABDOMEN_1K","modality":"CT","year":"2022","targets":"Liver, Spleen, Kidneys, Pancreas","image_count":1000,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/5903099"},
+  {"dataset":"HCC_TACE_SEG","modality":"CT","year":"2019","targets":"Liver Vessel, Aorta, Liver, Liver Tumor","image_count":100,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/hcc-tace-seg/"},
+  {"dataset":"FLARE_2022","modality":"CT","year":"2024","targets":"Multiple Abdominal Organs","image_count":50,"license":"CC-BY 4.0","dataset_link":"https://flare22.grand-challenge.org/Dataset/"},
+  {"dataset":"VESSEL12","modality":"CT","year":"2016","targets":"Lungs","image_count":20,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/8055066"},
+  {"dataset":"RIBSEG_V2","modality":"CT","year":"2023","targets":"Ribs, Rib Fractures","image_count":660,"license":"CC-BY-NC 4.0","dataset_link":"https://github.com/HINTLab/RibSeg"},
+  {"dataset":"WAW_TACE","modality":"CT","year":"2024","targets":"Liver Tumor","image_count":233,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/12741586"},
+  {"dataset":"COVID19_20","modality":"CT","year":"2022","targets":"Lung Lesion","image_count":199,"license":"CC-BY 4.0","dataset_link":"https://covid-segmentation.grand-challenge.org/COVID-19-20/"},
+  {"dataset":"PENGWIN","modality":"CT","year":"2024","targets":"Left Hipbone, Sacrum, Right Hipbone","image_count":100,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/10927452"},
+  {"dataset":"AUTOPET_2024_CT","modality":"CT","year":"2024","targets":"Lesion","image_count":1614,"license":"CC-BY-NC 4.0","dataset_link":"https://fdat.uni-tuebingen.de/records/6gjsg-zcg93"},
+  {"dataset":"LNQ_2023","modality":"CT","year":"2024","targets":"Lymph Node","image_count":513,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/mediastinal-lymph-node-seg/"},
+  {"dataset":"ADRENAL_ACC_KIT67","modality":"CT","year":"2023","targets":"Adrenocortical Carcinoma","image_count":53,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/adrenal-acc-ki67-seg/"},
+  {"dataset":"MSD_LIVER","modality":"CT","year":"2019","targets":"Liver, Liver Tumor","image_count":262,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"COVID19_LUNG_AND_INFECTION","modality":"CT","year":"2021","targets":"Right Lung, Lungs, Left Lung, Lung Lesion","image_count":20,"license":"CC BY-NC-SA","dataset_link":"https://zenodo.org/records/3757476"},
+  {"dataset":"MSD_COLON","modality":"CT","year":"2019","targets":"Colon Tumor","image_count":252,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"MEDIASTINAL_STRUCTURES","modality":"CT","year":"2015","targets":"Brachiocephalic Veins, Esophagus, Lymph Node","image_count":16,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/collection/ct-lymph-nodes/"},
+  {"dataset":"VERSE_2020","modality":"CT","year":"2021","targets":"Vertebrae","image_count":61,"license":"CC BY-SA 4.0","dataset_link":"https://github.com/anjany/verse"},
+  {"dataset":"PANCREAS_CT","modality":"CT","year":"2016","targets":"Pancreas","image_count":80,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/collection/pancreas-ct/"},
+  {"dataset":"NSCLC_RADIOGENOMICS","modality":"CT","year":"2018","targets":"Lung Tumor","image_count":88,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/collection/nsclc-radiogenomics/"},
+  {"dataset":"WORD","modality":"CT","year":"2022","targets":"Multiple Abdominal Organs","image_count":120,"license":"GPL-3.0","dataset_link":"https://github.com/HiLab-git/WORD"},
+  {"dataset":"CHAOS_CT","modality":"CT","year":"","targets":"Liver","image_count":20,"license":"CC BY-NC-SA 4.0","dataset_link":"https://zenodo.org/records/3431873"},
+  {"dataset":"PEDIATRIC_CT_SEG","modality":"CT","year":"2021","targets":"Multiple Pediatric Organs","image_count":340,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/pediatric-ct-seg/"},
+  {"dataset":"OCT_LESION","modality":"OCT","year":"","targets":"Lesion","image_count":72,"license":"CC-BY 4.0","dataset_link":"https://www.kaggle.com/datasets/zeeshanahmed13/intraretinal-cystoid-fluid"},
+  {"dataset":"AIDK","modality":"OCT","year":"","targets":"Cornea, Lesion, Iris","image_count":1168,"license":"CC0 1.0","dataset_link":"https://springernature.figshare.com/articles/dataset/An_AS-OCT_image_dataset_for_deep_learning-enabled_segmentation_and_3D_reconstruction_for_keratitis/25952845"},
+  {"dataset":"OIMHS","modality":"OCT","year":"","targets":"Choroid, Retina, Macular Hole, Intraretinal Fluid","image_count":3859,"license":"CC0 1.0","dataset_link":"https://springernature.figshare.com/articles/dataset/OIMHS_dataset/23508453"},
+  {"dataset":"INTRARETINAL_CYSTOID_FLUID","modality":"OCT","year":"2022","targets":"Intraretinal Fluid","image_count":1460,"license":"CC-BY-NC-SA 4.0","dataset_link":"https://www.kaggle.com/datasets/zeeshanahmed13/intraretinal-cystoid-fluid"},
+  {"dataset":"AMD_SD","modality":"OCT","year":"","targets":"Subretinal Fluid, Intraretinal Fluid","image_count":3049,"license":"CC0 1.0","dataset_link":"https://springernature.figshare.com/articles/dataset/An_Optical_Coherence_Tomography_Image_Dataset_for_wet_AMD_Lesions_Segmentation/25513435"},
+  {"dataset":"PTX_498","modality":"XRay","year":"2021","targets":"Pneumothorax","image_count":498,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/8266529"},
+  {"dataset":"COVID19_CXR","modality":"XRay","year":"2020","targets":"Multiple Chest Structures","image_count":100,"license":"","dataset_link":"https://github.com/GeneralBlockchain/covid-19-chest-xray-segmentations-dataset"},
+  {"dataset":"HIPBONE","modality":"XRay","year":"2021","targets":"Hipbone, Femur","image_count":140,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/zm6bxzhmfz/1"},
+  {"dataset":"PANDENTAL","modality":"XRay","year":"2017","targets":"Mandible","image_count":116,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/hxt48yk462/1"},
+  {"dataset":"TEETH_SEG","modality":"XRay","year":"2023","targets":"Tooth","image_count":598,"license":"CC0 1.0","dataset_link":"https://www.kaggle.com/datasets/humansintheloop/teeth-segmentation-on-dental-x-ray-images"},
+  {"dataset":"ARCADE","modality":"XRay","year":"2023","targets":"Stenosis, Coronary Artery","image_count":3000,"license":"CC0 1.0","dataset_link":"https://zenodo.org/records/10390295"},
+  {"dataset":"BTXRD","modality":"XRay","year":"","targets":"Bone Tumor","image_count":1867,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/A_Radiograph_Dataset_for_the_Classification_Localization_and_Segmentation_of_Primary_Bone_Tumors/27865398"},
+  {"dataset":"IBD","modality":"MRI","year":"2024","targets":"Multiple Bowel Segments","image_count":114,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/13839321"},
+  {"dataset":"PROMISE12","modality":"MRI","year":"2023","targets":"Prostate","image_count":100,"license":"","dataset_link":"https://zenodo.org/records/8026660"},
+  {"dataset":"ACDC","modality":"MRI","year":"2018","targets":"Left Ventricle, Myocardium, Right Ventricle","image_count":300,"license":"CC BY-NC-SA 4.0","dataset_link":"https://humanheart-project.creatis.insa-lyon.fr/database/#collection/637218c173e9f0047faa00fb/folder/637218e573e9f0047faa00fc"},
+  {"dataset":"MSD_HEART","modality":"MRI","year":"2019","targets":"Left Atrium","image_count":20,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"HYPO_SUBFIELDS","modality":"MRI","year":"","targets":"Hippocampal Subfields","image_count":20,"license":"CC-BY 4.0","dataset_link":"https://plus.figshare.com/articles/dataset/A_paired_dataset_of_multi-modal_MRI_at_3_Tesla_and_7_Tesla_with_manual_hippocampal_subfield_segmentations_on_7T_T2-weighted_images/26075713/1"},
+  {"dataset":"PITUITORY_TUMOR","modality":"MRI","year":"","targets":"Carotid, Pituitary Tumor","image_count":236,"license":"CC-BY 4.0","dataset_link":"https://springernature.figshare.com/articles/dataset/Mapping_pituitary_neuroendocrine_tumors_an_annotated_MRI_dataset_profiling_tumor_and_carotid_characteristics/27894084"},
+  {"dataset":"ISLES_2022","modality":"MRI","year":"","targets":"Stroke Lesion","image_count":750,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/7960856"},
+  {"dataset":"TOM500","modality":"MRI","year":"","targets":"Multiple Orbital Structures","image_count":500,"license":"CC0 1.0","dataset_link":"https://springernature.figshare.com/articles/dataset/TOM500_A_Multi-Organ_Annotated_Orbital_MRI_Dataset_for_Thyroid_Eye_Disease/27133389"},
+  {"dataset":"SPINE","modality":"MRI","year":"2014","targets":"Vertebrae","image_count":14,"license":"","dataset_link":"https://www.cg.informatik.uni-siegen.de/en/spine-segmentation-and-analysis"},
+  {"dataset":"SPIDER","modality":"MRI","year":"2023","targets":"Vertebrae, Spinal Canal, IVD","image_count":447,"license":"CC-BY 4.0","dataset_link":"https://zenodo.org/records/10159290"},
+  {"dataset":"CDEMRIS","modality":"MRI","year":"","targets":"Left Atrium","image_count":60,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/CDEMRIS_fibrosis_scar_challenge_data_2012/4214532"},
+  {"dataset":"MSD_PROSTATE","modality":"MRI","year":"2019","targets":"Prostate Peripheral Zone, Prostate Transitional Zone","image_count":32,"license":"CC BY-SA 4.0","dataset_link":"http://medicaldecathlon.com/#tasks"},
+  {"dataset":"CC_TUMOR_HETEROGENEITY","modality":"MRI","year":"2023","targets":"Cervical Tumor","image_count":56,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/cc-tumor-heterogeneity/"},
+  {"dataset":"MEDSEG_VENTRICLES","modality":"MRI","year":"","targets":"Ventricles","image_count":15,"license":"CC0 1.0","dataset_link":"https://figshare.com/articles/dataset/MedSeg_Ventricles_MRI_Dataset/19644636/1"},
+  {"dataset":"SEGTHY","modality":"MRI","year":"2022","targets":"Thyroid, Carotid, Jugular Vein","image_count":28,"license":"CC-BY 4.0","dataset_link":"https://www.cs.cit.tum.de/camp/publications/segthy-dataset/"},
+  {"dataset":"RESECT","modality":"MRI","year":"2017","targets":"Brain Tumor","image_count":46,"license":"CC BY-NC-SA 4.0","dataset_link":"https://osf.io/jv8bk/"},
+  {"dataset":"HVSMR_20","modality":"MRI","year":"","targets":"Multiple Heart Structures","image_count":60,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/HVSMR-2_0_orig_/25226360"},
+  {"dataset":"QIN_PROSTATE","modality":"MRI","year":"2017","targets":"Prostate, Prostate Tumor","image_count":90,"license":"CC-BY 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/qin-prostate-repeatability/"},
+  {"dataset":"ATRIASEG_2018","modality":"MRI","year":"2021","targets":"Left Atrium Wall, Left Atrium Cavity","image_count":154,"license":"","dataset_link":"https://www.cardiacatlas.org/atriaseg2018-challenge/atria-seg-data/"},
+  {"dataset":"NCI_ISBI","modality":"MRI","year":"2015","targets":"Prostate Peripheral Zone, Prostate Central Gland","image_count":80,"license":"CC-BY 3.0","dataset_link":"https://www.cancerimagingarchive.net/analysis-result/isbi-mr-prostate-2013/"},
+  {"dataset":"PICAI","modality":"MRI","year":"2022","targets":"Prostate Lesion","image_count":220,"license":"CC-BY-NC 4.0","dataset_link":"https://zenodo.org/records/6624726"},
+  {"dataset":"CHAOS_MRI","modality":"MRI","year":"","targets":"Liver, Spleen, Kidneys","image_count":60,"license":"CC BY-NC-SA 4.0","dataset_link":"https://zenodo.org/records/3431873"},
+  {"dataset":"HNTSMRG","modality":"MRI","year":"2024","targets":"Tumor, Metastatic Lymph Node","image_count":300,"license":"CC-BY-NC 4.0","dataset_link":"https://zenodo.org/records/11199559"},
+  {"dataset":"GBM_RESERVOIR","modality":"MRI","year":"","targets":"Necrosis, Enhancing Tumor, Edema","image_count":67764,"license":"CC-BY 4.0","dataset_link":"https://figshare.com/articles/dataset/GBM-Reservoir_Dataset_and_Segmentations/28001450"},
+  {"dataset":"CROSSMODA","modality":"MRI","year":"2021","targets":"Vestibular Schwannoma, Cochlea","image_count":243,"license":"CC BY-NC-SA 4.0","dataset_link":"https://www.cancerimagingarchive.net/collection/vestibular-schwannoma-seg/"},
+  {"dataset":"HAM_10000","modality":"Dermoscopy","year":"2018","targets":"Lesion","image_count":10015,"license":"CC-BY-NC 4.0","dataset_link":"https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DBW86T"},
+  {"dataset":"SKIN_HAIR","modality":"Dermoscopy","year":"2023","targets":"Skin Hair","image_count":500,"license":"CC-BY 4.0","dataset_link":"https://data.mendeley.com/datasets/j5ywpd2p27/2"},
+  {"dataset":"NEVUS","modality":"Dermoscopy","year":"2022","targets":"Nevus","image_count":3208,"license":"CC-BY 4.0","dataset_link":"https://www.kaggle.com/datasets/metavision/accurate-nevus-shapessegmentation"},
+  {"dataset":"ISIC_2018","modality":"Dermoscopy","year":"2018","targets":"Lesion, Globules, Streaks, Pigment Network","image_count":3694,"license":"CC-BY-NC 4.0","dataset_link":"https://challenge.isic-archive.com/data/#2018"},
+  {"dataset":"ISIC_2017","modality":"Dermoscopy","year":"2018","targets":"Lesion","image_count":2750,"license":"CC0 1.0","dataset_link":"https://challenge.isic-archive.com/data/#2017"},
+  {"dataset":"FUSC_2021","modality":"Dermoscopy","year":"2020","targets":"Foot Ulcer","image_count":1010,"license":"CC BY-NC","dataset_link":"https://github.com/uwm-bigdata/wound-segmentation/tree/master/data/Foot%20Ulcer%20Segmentation%20Challenge"},
+  {"dataset":"ISIC_2016","modality":"Dermoscopy","year":"2016","targets":"Lesion, Globules, Streaks","image_count":1279,"license":"CC0 1.0","dataset_link":"https://challenge.isic-archive.com/data/#2016"}
+];
+
+// ========== DOM refs ==========
+const tbody = document.getElementById('tableBody');
+const searchInput = document.getElementById('searchInput');
+const modalityFilter = document.getElementById('modalityFilter');
+const clearBtn = document.getElementById('clearBtn');
+const statsBar = document.getElementById('statsBar');
+
+let currentData = [...datasets];
+let sortColumn = 'dataset';
+let sortAsc = true;
+
+// ========== Populate modality filter ==========
+function populateModalityFilter() {
+    const mods = [...new Set(datasets.map(d => d.modality))].sort();
+    mods.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = m;
+        modalityFilter.appendChild(opt);
+    });
+}
+
+// ========== Render table ==========
+function renderTable(data) {
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="no-results">No datasets match your filters.</td></tr>`;
+        return;
+    }
+
+    let html = '';
+    data.forEach(d => {
+        const modClass = d.modality.replace(/\s/g, '');
+        const yearDisplay = d.year || '—';
+        const licenseDisplay = d.license || '—';
+
+        // Truncate targets
+        let targetsDisplay = d.targets;
+        if (targetsDisplay && targetsDisplay.length > 50) {
+            targetsDisplay = targetsDisplay.substring(0, 50) + '…';
+        }
+
+        html += `
+            <tr>
+                <td><strong>${d.dataset}</strong></td>
+                <td><span class="modality-badge ${modClass}">${d.modality}</span></td>
+                <td>${yearDisplay}</td>
+                <td class="targets-cell">${targetsDisplay || '—'}</td>
+                <td>${d.image_count}</td>
+                <td class="license-cell">${licenseDisplay}</td>
+                <td class="link-cell"><a href="${d.dataset_link}" target="_blank">🔗 Link</a></td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
+}
+
+// ========== Update stats ==========
+function updateStats(data) {
+    const total = data.length;
+    const mods = [...new Set(data.map(d => d.modality))];
+    const totalImages = data.reduce((sum, d) => sum + (d.image_count || 0), 0);
+
+    statsBar.innerHTML = `
+        <div class="stat-item"><div class="number">${total}</div><div class="label">Datasets</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="number">${mods.length}</div><div class="label">Modalities</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><div class="number">${totalImages.toLocaleString()}</div><div class="label">Total Images</div></div>
+    `;
+}
+
+// ========== Filter and sort ==========
+function applyFilters() {
+    const search = searchInput.value.toLowerCase().trim();
+    const modality = modalityFilter.value;
+
+    let filtered = datasets.filter(d => {
+        const matchSearch = !search ||
+            d.dataset.toLowerCase().includes(search) ||
+            d.modality.toLowerCase().includes(search) ||
+            (d.targets && d.targets.toLowerCase().includes(search)) ||
+            (d.paper_title && d.paper_title.toLowerCase().includes(search));
+        const matchModality = !modality || d.modality === modality;
+        return matchSearch && matchModality;
+    });
+
+    // Sort
+    filtered.sort((a, b) => {
+        let valA = a[sortColumn] || '';
+        let valB = b[sortColumn] || '';
+        if (typeof valA === 'string') valA = valA.toLowerCase();
+        if (typeof valB === 'string') valB = valB.toLowerCase();
+        if (valA < valB) return sortAsc ? -1 : 1;
+        if (valA > valB) return sortAsc ? 1 : -1;
+        return 0;
+    });
+
+    currentData = filtered;
+    renderTable(filtered);
+    updateStats(filtered);
+}
+
+// ========== Sort handler ==========
+document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+        const col = th.dataset.sort;
+        if (sortColumn === col) {
+            sortAsc = !sortAsc;
+        } else {
+            sortColumn = col;
+            sortAsc = true;
+        }
+        applyFilters();
+    });
+});
+
+// ========== Event listeners ==========
+searchInput.addEventListener('input', applyFilters);
+modalityFilter.addEventListener('change', applyFilters);
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    modalityFilter.value = '';
+    applyFilters();
+});
+
+// ========== Init ==========
+populateModalityFilter();
+applyFilters();
+</script>
+
+</body>
+</html>
